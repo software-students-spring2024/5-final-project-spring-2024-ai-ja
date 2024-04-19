@@ -55,11 +55,13 @@ def analyze():
             {"image_id": bson.ObjectId(image_id)},
             {"$set": {"status": "success"}},
         )
-        print("\n\n\n",images_collection.find_one({"image_id": bson.ObjectId(image_id)}).get("actual_age"),"\n\n\n")
         results_collection.insert_one(
             {
                 "image_id": bson.ObjectId(image_id),
-                "predicted_age": result,
+                "predicted_age": result[0],
+                "predicted_gender": result[1],
+                "predicted_race": result[3],
+                "dominant_emotion": result[2],
                 "actual_age": images_collection.find_one({"image_id": bson.ObjectId(image_id)}).get("actual_age"),
             }
         )

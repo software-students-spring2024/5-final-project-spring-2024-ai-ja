@@ -11,8 +11,11 @@
     <div class="container">
     <h1>Results</h1>
     <div class="indexForm">
-    <p>Your predicted age is: {{ specific_result.predicted_age }}</p>
     <p>Your actual age is: {{ specific_result.actual_age }}</p>
+    <p>Your predicted age is: {{ specific_result.predicted_age }}</p>
+    <p>Your predicted gender is: {{specific_result.predicted_gender }}</p>
+    <p>Your predicted race is: {{specific_result.predicted_race }}</p>
+    <p>Your dominant emotion is: {{specific_result.dominant_emotion }}</p>
 
     <!-- Canvas for Chart.js graph -->
     <div style="width:400px; height:400px; margin:auto;">

@@ -30,9 +30,31 @@
                 alert('Error starting task: ' + error.message);
             });
         }
+
+        function capturePhoto() {
+            fetch('/capture_photo')
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to capture photo');
+                    }
+                })
+                .then(data => {
+                    alert(`Photo captured and saved successfully: ${data.filename}`);
+                })
+                .catch(error => {
+                    console.error('Error capturing photo:', error);
+                    alert('Error capturing photo');
+                });
+        }
     </script>
 </head>
 <body>
+    <div class="container">
+        <h1>Capture Photo</h1>
+        <button onclick="capturePhoto()">Capture Photo</button>
+    </div>
     <div class="container">
     <h1>Upload Image for Age Estimation</h1>
     <form id="uploadForm" onsubmit="event.preventDefault(); startTask();">

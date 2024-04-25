@@ -8,6 +8,7 @@ import queue
 import tempfile
 import threading
 import time
+import cv2
 
 # import traceback
 from datetime import datetime
@@ -83,6 +84,31 @@ def processing(image_id):
     except bson.errors.InvalidId:
         app.logger.error("Invalid image_id provided.")
         return jsonify({"error": "Invalid image ID"}), 400
+    
+# capturing the photo
+@app.route('/capture_photo', methods=['GET'])
+def capture_photo():
+    camera = cv2.VideoCapture(0)  # initialize camera
+    
+    try:
+        # capture camera frame
+        success, frame = camera.read()  
+        if success:
+            # specify directory path
+            save_directory = './shots/'
+            filename = f'captured_photo_{int(time.time())}.jpg' 
+            
+            # save
+            cv2.imwrite(os.path.join(save_directory, filename), frame)
+            
+            # stop camera
+            camera.release()
+            
+            return jsonify({'message': 'Photo captured and saved successfully', 'filename': filename}), 200
+        else:
+            return jsonify({'error': 'Failed to capture photo'}), 500
+    except Exception as e:
+        return jsonify({'error': f'Error capturing photo: {str(e)}'}), 500
 
 def allowed_file(filename):
     """

@@ -32,13 +32,13 @@
                 datasets: [{
                     label: 'Predicted Age',
                     data: {{ predicted_ages | tojson | safe }},
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     fill: false
                 },
                 {
                     label: 'Actual Age',
                     data: {{ actual_ages | tojson | safe }},
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
                     fill: false
                 }]
             },

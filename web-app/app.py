@@ -24,6 +24,8 @@ from werkzeug.utils import secure_filename
 from pymongo import MongoClient
 import requests
 
+from openai import OpenAI
+
 
 load_dotenv()
 
@@ -31,6 +33,8 @@ app = Flask(__name__)
 task_queue = queue.Queue()
 results = {}
 
+openai_api_key = os.getenv("OPENAI_API_KEY")
+openai = OpenAI(api_key=openai_api_key)
 
 # MongoDB connection
 serverOptions = {
@@ -227,13 +231,14 @@ def show_results(image_id):
         result.html
     """
     try:
-        # Convert the image_id to a BSON ObjectId
         obj_id = bson.ObjectId(image_id)
         specific_result = results_collection.find_one({"image_id": obj_id})
-        print(specific_result)
         if not specific_result:
             flash("Result not found.", "error")
             return redirect(url_for("home"))
+
+        fun_prompt = f"Generate a fun message for someone who is {specific_result['predicted_age']} years old and seems {specific_result['dominant_emotion']}."
+        fun_message = generate_fun_message(fun_prompt)
 
         # Fetch all results for the graph
         all_results = results_collection.find({})
@@ -254,11 +259,32 @@ def show_results(image_id):
             predicted_ages=predicted_ages,
             actual_ages=actual_ages,
             labels=labels,
+            fun_message=fun_message
         )
     except bson.errors.InvalidId:
-        # invalid image ID error
         flash("Invalid image ID.", "error")
         return redirect(url_for("home"))
+
+def generate_fun_message(prompt):
+    """
+    Generates a fun message based on a prompt using OpenAI API.
+    """
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        if response.choices:
+            message = response.choices[0].message.content
+            return message
+        else:
+            return "No completion found."
+    except Exception as e:
+        app.logger.error(f"Failed to generate message: {str(e)}")
+        return "Error generating message."
 
 
 

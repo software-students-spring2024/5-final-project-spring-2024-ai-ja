@@ -16,11 +16,11 @@
     <p>Your predicted gender is: {{specific_result.predicted_gender }}</p>
     <p>Your predicted race is: {{specific_result.predicted_race }}</p>
     <p>Your dominant emotion is: {{specific_result.dominant_emotion }}</p>
-
     <!-- Canvas for Chart.js graph -->
     <div style="width:400px; height:400px; margin:auto;">
         <canvas id="ageComparisonChart"></canvas>
     </div>
+    <p>Your fun message: {{ fun_message }}</p>
     </div>
     </div>
     <script>
@@ -60,5 +60,6 @@
             }
         });
     </script>
+
 </body>
 </html>

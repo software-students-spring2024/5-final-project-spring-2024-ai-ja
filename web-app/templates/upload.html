@@ -41,13 +41,31 @@
                     }
                 })
                 .then(data => {
+                    // Update the form to include the captured photo path for submission
+                    const imgForm = document.getElementById('uploadForm');
+                    const imgInput = document.getElementById('image');
+                    imgInput.style.display = 'none'; // Hide the file input
+                    const newImage = document.createElement("input");
+                    newImage.setAttribute("type", "hidden");
+                    newImage.setAttribute("name", "captured_photo");
+                    newImage.setAttribute("value", data.filename);
+                    imgForm.appendChild(newImage);
+
+                    const imageDisplay = document.createElement("img");
+                    imageDisplay.src = `/shots/${data.filename}`; // Adjust according to actual path
+                    imageDisplay.alt = 'Captured Photo';
+                    imageDisplay.style.maxWidth = '300px';
+                    imageDisplay.style.maxHeight = '300px';
+                    document.querySelector('.container').appendChild(imageDisplay);
+
                     alert(`Photo captured and saved successfully: ${data.filename}`);
                 })
                 .catch(error => {
                     console.error('Error capturing photo:', error);
-                    alert('Error capturing photo');
+                    alert('Error capturing photo: ' + error.message);
                 });
         }
+
     </script>
 </head>
 <body>

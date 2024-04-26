@@ -56,7 +56,7 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 @app.route("/processing/<image_id>")
 def processing(image_id):
     """
-    Instead of threading, let's call process_image directly.
+    Instead of threading, calling the process_image directly.
     """
     try:
         grid_out = fs.get(bson.ObjectId(image_id))
@@ -64,54 +64,43 @@ def processing(image_id):
         with open(temp_filepath, "wb") as f:
             f.write(grid_out.read())
         with open(temp_filepath, "rb") as file:
-            requests.post(
-                "http://machine-learning-client:5001/analyze",
-                files={"file": file},
-                data={"image_id": str(image_id)},
-                timeout=1000,
-            )
-
+            requests.post("http://machine-learning-client:5001/analyze", files={"file": file}, data={"image_id": str(image_id)}, timeout=1000)
         wait_interval = 5
-
         while True:
-            current_image_doc = images_collection.find_one(
-                {"image_id": bson.ObjectId(image_id)}
-            )
+            current_image_doc = images_collection.find_one({"image_id": bson.ObjectId(image_id)})
             if current_image_doc and current_image_doc.get("status") == "success":
                 return redirect(url_for("show_results", image_id=image_id))
             if current_image_doc and current_image_doc.get("status") == "failed":
-                # call a method that prints an error message to the screen/ add exception
-                app.logger.error("error occurred.")
-
+                flash("Processing failed", "error")
+                app.logger.error("Processing failed for image ID %s", image_id)
             time.sleep(wait_interval)
-    # call a method that prints an error message to the screen
     except bson.errors.InvalidId:
+        flash("Invalid image ID provided.", "error")
         app.logger.error("Invalid image_id provided.")
         return jsonify({"error": "Invalid image ID"}), 400
     
 # capturing the photo
 @app.route('/capture_photo', methods=['GET'])
 def capture_photo():
+    """
+    Function to capture a user photo
+    """
     camera = cv2.VideoCapture(0)  # initialize camera
-    
     try:
-        # capture camera frame
-        success, frame = camera.read()  
+        success, frame = camera.read()
         if success:
-            # specify directory path
             save_directory = './shots/'
-            filename = f'captured_photo_{int(time.time())}.jpg' 
-            
-            # save
-            cv2.imwrite(os.path.join(save_directory, filename), frame)
-            
-            # stop camera
+            if not os.path.exists(save_directory):
+                os.makedirs(save_directory)
+            filename = f'captured_photo_{int(time.time())}.jpg'
+            filepath = os.path.join(save_directory, filename)
+            cv2.imwrite(filepath, frame)
             camera.release()
-            
             return jsonify({'message': 'Photo captured and saved successfully', 'filename': filename}), 200
         else:
             return jsonify({'error': 'Failed to capture photo'}), 500
     except Exception as e:
+        camera.release()  # Ensure camera is released on error
         return jsonify({'error': f'Error capturing photo: {str(e)}'}), 500
 
 def allowed_file(filename):
@@ -184,11 +173,11 @@ def upload_image():
         or re-render the upload page with appropriate error messages if not.
     """
     if request.method == "POST":
-        if "image" not in request.files or "age" not in request.form:
+        image = request.files.get("image")
+        actual_age = request.form.get("age")
+        if not image or not actual_age:
             flash("Missing data", "error")
             return jsonify({"error": "Missing data"}), 400
-        image = request.files["image"]
-        actual_age = request.form["age"]
         if image.filename == "":
             flash("No selected file", "error")
             return jsonify({"error": "No selected file"}), 400
@@ -196,28 +185,20 @@ def upload_image():
             filename = secure_filename(image.filename)
             try:
                 image_id = fs.put(image, filename=filename)
-                images_collection.insert_one(
-                    {
-                        "image_id": image_id,
-                        "filename": filename,
-                        "status": "pending",
-                        "upload_date": datetime.now(),
-                        "actual_age": str(actual_age),
-                    }
-                )
-                return (
-                    jsonify(
-                        {
-                            "message": "File uploaded successfully",
-                            "task_id": str(image_id),
-                        }
-                    ),
-                    200,
-                )
-            except FileNotFoundError as e:
+                images_collection.insert_one({
+                    "image_id": image_id,
+                    "filename": filename,
+                    "status": "pending",
+                    "upload_date": datetime.now(),
+                    "actual_age": actual_age,
+                })
+                return jsonify({"message": "File uploaded successfully", "task_id": str(image_id)}), 200
+            except Exception as e:
+                flash("File upload failed", "error")
                 app.logger.error("File upload failed: %s", str(e))
-                return jsonify({"error": "File not found"}), 500
+                return jsonify({"error": "File upload failed"}), 500
         else:
+            flash("Invalid file type", "error")
             return jsonify({"error": "Invalid file type"}), 400
     return render_template("upload.html")
 

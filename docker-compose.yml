@@ -31,6 +31,8 @@ services:
       - mongodb
     ports:
       - "5002:5000"
+    devices:
+      - "/dev/video0:/dev/video0"
     networks:
       - app-network
     

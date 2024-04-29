@@ -7,3 +7,4 @@ pylint
 black
 opencv-python
 openai
+cv2

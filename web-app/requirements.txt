@@ -5,5 +5,4 @@ requests
 python-dotenv
 pylint
 black
-opencv-python
 openai

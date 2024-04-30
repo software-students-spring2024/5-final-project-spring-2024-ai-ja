@@ -2,5 +2,6 @@ tf-keras
 deepface
 pymongo
 pytest
+pytest-mock
 pylint
 black

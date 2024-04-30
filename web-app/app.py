@@ -38,8 +38,8 @@ openai = OpenAI(api_key=openai_api_key)
 # MongoDB connection
 serverOptions = {
     "socketTimeoutMS": 600000,  # 10 minutes
-    "connectTimeoutMS": 30000,  # 30 seconds
-    "serverSelectionTimeoutMS": 30000,  # 30 seconds
+    "connectTimeoutMS": 300000,  # 300 seconds
+    "serverSelectionTimeoutMS": 300000,  # 300 seconds
 }
 
 client = MongoClient("mongodb://mongodb:27017/", **serverOptions)

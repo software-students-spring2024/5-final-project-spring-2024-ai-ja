@@ -29,7 +29,7 @@ To use the app, open a web browser and navigate to [localhost:5002](http://local
 
 # Starter Data
 
-No starter data is required
+No starter data is required.
 
 # Contributors
 

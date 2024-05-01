@@ -1,4 +1,4 @@
-![Lint-free](https://github.com/nyu-software-engineering/final-project/actions/workflows/ci-cd.yml/badge.svg)
+![CI/CD Pipeline](https://github.com/nyu-software-engineering/final-project/actions/workflows/ci-cd.yml/badge.svg)
 
 # Final Project
 

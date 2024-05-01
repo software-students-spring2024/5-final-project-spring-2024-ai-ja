@@ -1,4 +1,4 @@
-![CI/CD Pipeline](https://github.com/nyu-software-engineering/final-project/actions/workflows/ci-cd.yml/badge.svg)
+[![CI/CD Pipeline](https://github.com/software-students-spring2024/5-final-project-spring-2024-ai-ja/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/software-students-spring2024/5-final-project-spring-2024-ai-ja/actions/workflows/ci-cd.yml)
 
 # Final Project
 

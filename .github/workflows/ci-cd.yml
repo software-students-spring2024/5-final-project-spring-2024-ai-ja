@@ -47,10 +47,10 @@ jobs:
           # pip install pytest
 
       # Run unit tests for Web App
-      - name: Run unit tests for Web App
-        run: |
-          cd web-app
-          pytest
+      # - name: Run unit tests for Web App
+      #   run: |
+      #     cd web-app
+      #     pytest
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

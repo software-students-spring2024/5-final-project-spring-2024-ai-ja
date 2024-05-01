@@ -12,9 +12,9 @@ from api import analyze_image
 app = Flask(__name__)
 
 serverOptions = {
-    "socketTimeoutMS": 6000000,  # 10 minutes
-    "connectTimeoutMS": 3000000,  # 30 seconds
-    "serverSelectionTimeoutMS": 3000000,  # 30 seconds
+    "socketTimeoutMS": 600000,  # 10 minutes
+    "connectTimeoutMS": 300000,  # 30 seconds
+    "serverSelectionTimeoutMS": 300000,  # 30 seconds
 }
 
 client = MongoClient("mongodb://mongodb:27017/", **serverOptions)

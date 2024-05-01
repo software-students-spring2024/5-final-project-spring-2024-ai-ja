@@ -36,7 +36,7 @@ services:
     
 networks:
   app-network:
-    driver: bridge
+    driver: bridgea
 
 volumes:
   mongodb_data:

@@ -48,6 +48,7 @@ jobs:
       - name: Run unit tests for Web App
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           cd web-app
           pytest

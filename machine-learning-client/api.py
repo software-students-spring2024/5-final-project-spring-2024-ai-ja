@@ -24,12 +24,7 @@ def analyze_image(img_path):
         result = DeepFace.analyze(img_path=img_path, actions=["age", "gender", "emotion", "race"])
         logging.info("Analysis result: %s", result)
         # Updated to access dictionary values directly
-        return [
-            result["age"],
-            result["dominant_gender"],
-            result["dominant_emotion"],
-            result["dominant_race"]
-        ]
+        return [result[0]["age"], result[0]["dominant_gender"], result[0]["dominant_emotion"], result[0]["dominant_race"]]
     except Exception as e:
-        logging.error("An error occurred during image analysis: %s", e)
-        raise
+         logging.error("An error occurred during image analysis: %s", e)
+         raise

@@ -9,7 +9,7 @@ This project utilizes ML to estimate the age, gender, race, and dominant emotion
 
 # How to run
 
-Our project is currently deployed [here](http://143.198.20.243:5002/).
+Our project is currently deployed [here](http://143.198.20.243:5002/) --> http://143.198.20.243:5002/
 
 If not using the deployed link, this app can be run through Docker Desktop. If you need to install Docker, you can create an account and download it [here](https://www.docker.com/products/docker-desktop/).
 
@@ -33,7 +33,7 @@ No starter data is required.
 
 # Contributors
 
-- [Adam Schwartz](https://github.com/aschwartz01)
 - [Alex Kondratiuk](https://github.com/ak8000)
 - [Janet Pan](https://github.com/jp6024)
+- [Adam Schwartz](https://github.com/aschwartz01)
 - [Isaac Kwon](https://github.com/iok206)

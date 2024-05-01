@@ -31,7 +31,6 @@ jobs:
         run: |
           cd machine-learning-client
           pip install -r requirements.txt
-          # pip install pytest
 
       # Run unit tests for ML client
       - name: Run unit tests for ML client
@@ -44,7 +43,6 @@ jobs:
         run: |
           cd web-app
           pip install -r requirements.txt
-          # pip install pytest
 
       # Run unit tests for Web App
       # - name: Run unit tests for Web App
@@ -78,5 +76,11 @@ jobs:
           push: true
           tags: kondalex/web-app:latest
 
+      - name: Deploy Docker images
+        run: |
+          docker pull kondalex/machine-learning-client:latest
+          docker pull kondalex/web-app:latest
+          docker-compose -f docker-compose.yml up -d
+
       - name: Notify Deployment
-        run: echo "Images built and pushed successfully!"
+        run: echo "Images built, pushed, and deployed successfully!"
